@@ -75,7 +75,7 @@ def callback():
     else:
         return "User email not available or not verified by Google.", 400
 
-    if not user:
+    if user is None:
         user = user_controller.create_user(user_info)
 
     login_user(user)
