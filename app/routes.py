@@ -1,4 +1,3 @@
-import json
 import logging
 from logging.handlers import RotatingFileHandler
 from urllib import response
@@ -10,9 +9,10 @@ from flask_login import (
     logout_user,
 )
 import requests
-from app import app
-from app.models import User, db, load_test_data
-from app.services import google_auth_service, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+from app import app, db
+from app.models import User, load_test_data
+from app.controllers import user_controller
+from app.services import google_auth_service
 
 # Set format that both loggers will use:
 formatter = logging.Formatter(
@@ -62,6 +62,7 @@ def login():
 
 @app.route("/login/callback")
 def callback():
+    """Authentication callback route, used by Google OAuth API to confirm login."""
     # # Get authorization code Google sent back to you
     code = request.args.get("code")
 
@@ -69,8 +70,17 @@ def callback():
         code, request.url, request.base_url)
     user_info = google_auth_service.get_user_info(user_token)
 
-    logging.getLogger('app_debug').warning(user_info)
+    if google_auth_service.verify_valid_email(user_info):
+        user = user_controller.get_user(user_info)
+    else:
+        return "User email not available or not verified by Google.", 400
 
+    if not user:
+        user = user_controller.create_user(user_info)
+
+    login_user(user)
+
+    # Send user back to homepage
     return redirect(url_for("index"))
 
 

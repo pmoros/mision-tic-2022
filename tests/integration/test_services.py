@@ -12,3 +12,13 @@ class TestGoogleAuth(TestCase):
         provided_cfg = self.auth_service.get_provider_cfg()
         logger.debug(provided_cfg)
         assert provided_cfg.get('authorization_endpoint') is not None
+
+    def test_get_authorization_endpoint(self):
+        provided_endpoint = self.auth_service.get_authorization_endpoint()
+        logger.debug(provided_endpoint)
+        assert provided_endpoint is not None
+
+    def test_verify_valid_email(self):
+        user_info = {
+            'email': None}
+        assert self.auth_service.verify_valid_email(user_info) is not None

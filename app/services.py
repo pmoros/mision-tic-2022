@@ -67,6 +67,10 @@ class GoogleAuthService():
 
         return userinfo_response.json()
 
+    def verify_valid_email(self, userinfo):
+        email_verified = userinfo.get("email_verified", False)
+        return email_verified
+
 
 google_auth_service = GoogleAuthService(
     google_app_client, GOOGLE_DISCOVERY_URL, GOOGLE_AUTH_ENDPOINT)
