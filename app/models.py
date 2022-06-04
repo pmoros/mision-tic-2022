@@ -9,10 +9,8 @@ class User(UserMixin, db.Model):
     profile_pic = db.Column(db.String(255), nullable=False)
 
 
-def initialize_database():
-    db.create_all()  # Create the database tables
-
-    # Test data
+def load_test_data():
+    # User test data
     test_user = User(name='testName', email='testEmail', profile_pic='testPic')
     db.session.add(test_user)
     db.session.commit()
