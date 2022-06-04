@@ -84,6 +84,13 @@ def callback():
     return redirect(url_for("index"))
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
 @app.route("/create_database", methods=["POST"])
 def create_database():
     db.create_all()
