@@ -2,6 +2,7 @@
 import os
 import json
 import logging
+from logging.config import dictConfig
 
 # Third party libraries imports
 from dotenv import load_dotenv
@@ -9,7 +10,6 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-from logging.config import dictConfig
 
 dictConfig({
     'version': 1,
