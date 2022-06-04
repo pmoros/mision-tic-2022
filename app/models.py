@@ -15,9 +15,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     profile_pic = db.Column(db.String(255), nullable=False)
     type = db.Column(db.Enum(UserChoices))
-    order_vendor = db.relationship("Order", backref="order", uselist=False)
-    order_customer = db.relationship("Order", backref="order", uselist=False)
-    stores = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
+    order_vendor = db.relationship(
+        "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.vendor_id")
+    order_customer = db.relationship(
+        "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.customer_id")
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
     city = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
 
 
