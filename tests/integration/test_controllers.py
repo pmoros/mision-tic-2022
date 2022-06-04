@@ -46,6 +46,10 @@ class TestProductController(TestCase):
     def tearDown(self):
         self.app_context.pop()
 
+    def test_create_product(self):
+        result = product_controller.create_product(self.product)
+        self.assertEqual(result.id, 1)
+
     def test_get_all_products(self):
         result = product_controller.get_all_products()
         self.assertEqual(len(result), 2)

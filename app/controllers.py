@@ -25,6 +25,15 @@ class UserController():
 
 
 class ProductController():
+    def create_product(self, product):
+        # try:
+        #     db.session.add(product)
+        #     db.session.commit()
+        # except Exception as e:
+        #     db.session.rollback()
+        #     product = Product.query.filter_by(id=product.id).first()
+        pass
+
     def get_all_products(self):
         # return Product.query.all()
         pass
