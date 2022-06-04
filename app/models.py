@@ -16,9 +16,9 @@ class User(UserMixin, db.Model):
     profile_pic = db.Column(db.String(255), nullable=False)
     type = db.Column(db.Enum(UserChoices))
     order_vendor = db.relationship(
-        "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.vendor_id")
+        "Order", backref="order_vendor", uselist=False,  primaryjoin="User.id == Order.vendor_id")
     order_customer = db.relationship(
-        "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.customer_id")
+        "Order", backref="order_customer", uselist=False,  primaryjoin="User.id == Order.customer_id")
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=True)
     city = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
 
@@ -56,8 +56,9 @@ class Store(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     county = db.Column(db.String(255), nullable=False)
-    users = db.relationship("User", backref="user", uselist=False)
-    products = db.relationship("Product", backref="product", uselist=False)
+    users = db.relationship("User", backref="user_vendor", uselist=False)
+    products = db.relationship(
+        "Product", backref="offered_product", uselist=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
 
 
@@ -70,7 +71,7 @@ class Order(db.Model):
     Confirmed = db.Column(db.Boolean, default=False, nullable=False)
     accepted = db.Column(db.Boolean, default=False, nullable=False)
     orderDetails = db.relationship(
-        "OrderDetail", backref="order_detail", uselist=False)
+        "OrderDetail", backref="order_details", uselist=False)
     vendor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     customer_id = db.Column(
         db.Integer, db.ForeignKey('user.id'), nullable=False)
