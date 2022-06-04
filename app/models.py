@@ -19,8 +19,8 @@ class User(UserMixin, db.Model):
         "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.vendor_id")
     order_customer = db.relationship(
         "Order", backref="order", uselist=False,  primaryjoin="User.id == Order.customer_id")
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
-    city = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=True)
+    city = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
 
 
 class ProductLine(db.Model):
