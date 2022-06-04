@@ -2,6 +2,7 @@
 import os
 import json
 import logging
+from logging.config import dictConfig
 
 # Third party libraries imports
 from dotenv import load_dotenv
@@ -9,7 +10,6 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-from logging.config import dictConfig
 
 dictConfig({
     'version': 1,
@@ -31,7 +31,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URL')
 
 login_manager = LoginManager()
 login_manager.init_app(app)

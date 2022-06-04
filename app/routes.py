@@ -75,7 +75,7 @@ def callback():
     else:
         return "User email not available or not verified by Google.", 400
 
-    if not user:
+    if user is None:
         user = user_controller.create_user(user_info)
 
     login_user(user)
@@ -99,6 +99,7 @@ def create_database():
 
 @app.route("/drop_database", methods=["POST"])
 def drop_database():
+    db.metadata.drop_all(bind=db.engine)
     db.drop_all()
     return "Database dropped"
 
