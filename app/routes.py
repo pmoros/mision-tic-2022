@@ -8,8 +8,14 @@ from flask_login import (
 )
 import requests
 from app import app
-from app.models import User
+from app.models import User, initialize_database
 from app.services import google_auth_service, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+
+
+@app.route("/create_database", methods=["POST"])
+def create_database():
+    initialize_database()
+    return "Database created"
 
 
 @app.route("/")
