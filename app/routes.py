@@ -67,8 +67,9 @@ def callback():
 
     user_token = google_auth_service.get_authorized_token(
         code, request.url, request.base_url)
+    user_info = google_auth_service.get_user_info(user_token)
 
-    logging.getLogger('app_debug').warning(user_token.text)
+    logging.getLogger('app_debug').warning(user_info)
 
     return redirect(url_for("index"))
 

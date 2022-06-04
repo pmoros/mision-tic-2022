@@ -1,4 +1,5 @@
 # Standard libraries imports
+import json
 import os
 
 # Standard libraries imports
@@ -24,6 +25,7 @@ class GoogleAuthService():
         self.client = client
         self.discovery_url = discovery_url
         self.authorization_endpoint = authorization_endpoint
+        self.google_provider_cfg = self.get_provider_cfg()
 
     def get_provider_cfg(self):
         return requests.get(self.discovery_url).json()
@@ -32,7 +34,6 @@ class GoogleAuthService():
         return self.authorization_endpoint
 
     def get_authorized_token(self, code, url, base_url):
-        google_provider_cfg = self.get_provider_cfg()
         authorization_endpoint = self.get_authorization_endpoint()
 
         # Prepare and send a request to get tokens! Yay tokens!
@@ -52,6 +53,19 @@ class GoogleAuthService():
         )
 
         return token_response
+
+    def get_user_info(self, access_token):
+        # # Parse the tokens!
+        self.client.parse_request_body_response(
+            json.dumps(access_token.json()))
+
+        # including their Google profile image and email
+        userinfo_endpoint = self.google_provider_cfg["userinfo_endpoint"]
+        uri, headers, body = google_auth_service.client.add_token(
+            userinfo_endpoint)
+        userinfo_response = requests.get(uri, headers=headers, data=body)
+
+        return userinfo_response.json()
 
 
 google_auth_service = GoogleAuthService(
