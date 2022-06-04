@@ -99,6 +99,7 @@ def create_database():
 
 @app.route("/drop_database", methods=["POST"])
 def drop_database():
+    db.metadata.drop_all(bind=db.engine)
     db.drop_all()
     return "Database dropped"
 
