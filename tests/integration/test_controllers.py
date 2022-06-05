@@ -3,7 +3,7 @@ from unittest import TestCase
 from flask import request, Flask
 
 from app import db, app
-from app.models import User
+from app.models import Product, User
 from app.controllers import user_controller, product_controller
 from tests import logger
 
@@ -38,10 +38,8 @@ class TestProductController(TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.product = {'id': 1, 'name': 'Product 1',
-                        'description': 'Description 1', 'price': 1.0, 'image': 'image1.jpg'}
-        self.product_list = [{'id': 1, 'name': 'Product 1', 'description': 'Description 1', 'price': 1.0, 'image': 'image1.jpg'}, {
-            'id': 2, 'name': 'Product 2', 'description': 'Description 2', 'price': 2.0, 'image': 'image2.jpg'}]
+        self.product = Product(name="Product 1", price=10.0,
+                               image="https://via.placeholder.com/150", stock=10)
 
     def tearDown(self):
         self.app_context.pop()
@@ -52,6 +50,10 @@ class TestProductController(TestCase):
 
     def test_get_all_products(self):
         result = product_controller.get_all_products()
+        self.assertEqual(result[0].image, 'image1.jpg')
+        self.assertEqual(result[0].name, 'Product 1')
+        self.assertEqual(result[0].price, 1.0)
+        self.assertEqual(result[0].stock, 0)
         self.assertEqual(len(result), 2)
 
     def test_get_product(self):

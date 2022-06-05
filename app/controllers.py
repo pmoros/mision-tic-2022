@@ -1,4 +1,4 @@
-from app.models import db, User
+from app.models import Product, db, User
 
 
 class UserController():
@@ -36,7 +36,11 @@ class ProductController():
 
     def get_all_products(self):
         # return Product.query.all()
-        pass
+        dummy_products = [Product(name="Product 1", price=10.0, image="https://via.placeholder.com/150", stock=10),
+                          Product(name="Product 2", price=20.0,
+                                  image="https://via.placeholder.com/150", stock=20), Product(name="Product 3", price=30.0, image="https://via.placeholder.com/150", stock=30), Product(name="Product 4", price=40.0, image="https://via.placeholder.com/150", stock=0)]
+
+        return dummy_products
 
     def get_product(self, product_id):
         # return Product.query.get(product_id)
