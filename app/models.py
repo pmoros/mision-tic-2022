@@ -36,7 +36,8 @@ class Product(db.Model):
     description = db.Column(db.String(255), nullable=True)
     stock = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    availabe = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(500), nullable=False)
+    available = db.Column(db.Boolean, default=True, nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
     productLine_id = db.Column(db.Integer, db.ForeignKey(
         'product_line.id'), nullable=False)
