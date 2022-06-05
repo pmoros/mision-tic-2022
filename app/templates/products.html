@@ -1,0 +1,55 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <div class="table-wrap">
+    <table class="table table-responsive table-borderless">
+      <thead>
+        <th>&nbsp;</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>&nbsp;</th>
+      </thead>
+      <tbody>
+        {% for product in products %}
+
+        <tr class="align-middle alert border-bottom" role="alert">
+          <td class="text-center">
+            <img class="img-thumbnail" src="{{ product.image }}" alt="" />
+          </td>
+          <td>
+            <div>
+              <p class="m-0 fw-bold">{{ product.name }}</p>
+              <p class="m-0 text-muted">{{ product.description }}</p>
+            </div>
+          </td>
+          <td>
+            <div class="fw-600">${{ product.price }}</div>
+          </td>
+          <!-- <td class="d-"> -->
+          <!-- <input class="input" type="text" placeholder="2" /> -->
+          <!-- </td> -->
+          <td>${{ product.stock }}</td>
+          <td>
+            <div class="btn" data-bs-dismiss="alert">
+              <a href="#">
+                <span class="fas fa-pencil-alt text-warning"></span>
+              </a>
+            </div>
+            <div class="btn" data-bs-dismiss="alert">
+              <a href="/products/delete/{{ product.id }}">
+                <span class="fas fa-times text-danger"></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="span12 justify-content-center text-center m-3">
+    <a class="btn btn-outline-secondary span4" id="insertRow" href="#"
+      >Agregar nuevo producto</a
+    >
+  </div>
+</div>
+{% endblock %}

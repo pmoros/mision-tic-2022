@@ -33,6 +33,32 @@ def index():
     return render_template("index.html", user=current_user, products=stored_products)
 
 
+@app.route("/products")
+@login_required
+def products():
+    stored_products = product_controller.get_all_products()
+    return render_template("products.html", user=current_user, products=stored_products)
+
+
+@app.route("/products", methods=["POST"])
+@login_required
+def products_create():
+    product_values = request.form.to_dict()
+    product_controller.create_product(product_values)
+
+    return redirect(url_for("products"))
+
+
+# This is a bad way to do it, but I'm not sure how to do it better
+
+
+@app.route("/products/delete/<int:product_id>")
+@login_required
+def products_delete(product_id):
+    # product_controller.delete_product(product_id)
+    return redirect(url_for("products"))
+
+
 @app.route("/login")
 def login():
     # Find out what URL to hit for Google login

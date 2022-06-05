@@ -36,9 +36,9 @@ class ProductController():
 
     def get_all_products(self):
         # return Product.query.all()
-        dummy_products = [Product(name="Product 1", price=10.0, image="https://via.placeholder.com/150", stock=10),
-                          Product(name="Product 2", price=20.0,
-                                  image="https://via.placeholder.com/150", stock=20), Product(name="Product 3", price=30.0, image="https://via.placeholder.com/150", stock=30), Product(name="Product 4", price=40.0, image="https://via.placeholder.com/150", stock=0)]
+        dummy_products = [Product(id=1, name="Product 1", description="Handy product 1", price=10.0, image="https://via.placeholder.com/150", stock=10),
+                          Product(id=2, name="Product 2", description="Handy product 2", price=20.0,
+                                  image="https://via.placeholder.com/150", stock=20), Product(id=3, name="Product 3", description="Handy product 3", price=30.0, image="https://via.placeholder.com/150", stock=30), Product(id=4, name="Product 4", description="Handy product 4", price=40.0, image="https://via.placeholder.com/150", stock=0)]
 
         return dummy_products
 
