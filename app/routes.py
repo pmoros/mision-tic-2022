@@ -39,8 +39,17 @@ def products():
     stored_products = product_controller.get_all_products()
     return render_template("products.html", user=current_user, products=stored_products)
 
+# This is a bad way to do it, but I'm not sure how to do it better
 
-@app.route("/products", methods=["POST"])
+
+@app.route("/products/create", methods=["GET"])
+@login_required
+def products_create_form():
+    # product_controller.edit_product(product_id, product_values)
+    return render_template("products_create.html", user=current_user)
+
+
+@app.route("/products/create", methods=["POST"])
 @login_required
 def products_create():
     product_values = request.form.to_dict()
@@ -49,13 +58,28 @@ def products_create():
     return redirect(url_for("products"))
 
 
-# This is a bad way to do it, but I'm not sure how to do it better
+@app.route("/products/edit/<int:product_id>", methods=["GET"])
+@login_required
+def products_edit_form(product_id):
+    product = product_controller.get_product(product_id)
+    return render_template("products_edit.html", user=current_user, old=product)
+
+
+@app.route("/products/edit/<int:product_id>", methods=["POST"])
+@login_required
+def products_edit(product_id):
+    product_values = request.form.to_dict()
+    app.logger.info("Editing product with id: %d", product_values.get("id"))
+    # product_controller.edit_product(product_id, product_values)
+
+    return redirect(url_for("products"))
 
 
 @app.route("/products/delete/<int:product_id>")
 @login_required
 def products_delete(product_id):
     # product_controller.delete_product(product_id)
+    app.logger.info("Deleting product with id: %d", product_id)
     return redirect(url_for("products"))
 
 
