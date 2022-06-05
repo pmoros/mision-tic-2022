@@ -11,7 +11,7 @@ from flask_login import (
 import requests
 from app import app, db
 from app.models import User, load_test_data
-from app.controllers import user_controller
+from app.controllers import user_controller, product_controller
 from app.services import google_auth_service
 
 # Set format that both loggers will use:
@@ -29,7 +29,8 @@ a.addHandler(log_handler)
 
 @app.route("/")
 def index():
-    return render_template("index.html", user=current_user)
+    stored_products = product_controller.get_all_products()
+    return render_template("index.html", user=current_user, products=stored_products)
 
 
 @app.route("/login")
