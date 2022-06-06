@@ -1,3 +1,5 @@
+from sqlalchemy.exc import IntegrityError
+from app import app
 from app.models import Product, db, User
 
 
@@ -26,33 +28,42 @@ class UserController():
 
 class ProductController():
     def create_product(self, product):
-        # try:
-        #     db.session.add(product)
-        #     db.session.commit()
-        # except Exception as e:
-        #     db.session.rollback()
-        #     product = Product.query.filter_by(id=product.id).first()
-        pass
+        product = Product(name=product.get("name", ""), description=product.get("description", ""), image=product.get("image", ""), price=product.get("price", 0),
+                          stock=product.get("stock", 0), available=product.get("available", 0), store_id=product.get("store_id", 1), productLine_id=product.get("productLine_id", 1))
+        try:
+            db.session.add(product)
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            app.logger.error(e)
+
+        return Product.query.order_by(Product.id.desc()).first().id
 
     def get_all_products(self):
-        # return Product.query.all()
-        dummy_products = [Product(id=1, name="Product 1", description="Handy product 1", price=10.0, image="https://via.placeholder.com/150", stock=10),
-                          Product(id=2, name="Product 2", description="Handy product 2", price=20.0,
-                                  image="https://via.placeholder.com/150", stock=20), Product(id=3, name="Product 3", description="Handy product 3", price=30.0, image="https://via.placeholder.com/150", stock=30), Product(id=4, name="Product 4", description="Handy product 4", price=40.0, image="https://via.placeholder.com/150", stock=0)]
-
-        return dummy_products
+        return Product.query.all()
 
     def get_product(self, product_id):
-        # return Product.query.get(product_id)
-        pass
+        return Product.query.get(product_id)
 
-    def get_products_ordered_by(self, field, asc=True):
-        # if asc:
-        #     return Product.query.order_by(Product.name).all()
-        # else:
-        #     return Product.query.order_by(Product.name.desc()).all()
+    def edit_product(self, product_id, product_values):
+        product = Product.query.get(product_id)
+        product.name = product_values.get("name", product.name)
+        product.description = product_values.get(
+            "description", product.description)
+        product.image = product_values.get("image", product.image)
+        product.price = product_values.get("price", product.price)
+        product.stock = product_values.get("stock", product.stock)
+        product.available = product_values.get("available", product.available)
+        product.store_id = product_values.get("store_id", product.store_id)
+        product.productLine_id = product_values.get(
+            "productLine_id", product.productLine_id)
 
-        pass
+        db.session.commit()
+
+    def delete_product(self, product_id):
+        product = Product.query.get(product_id)
+        db.session.delete(product)
+        db.session.commit()
 
 
 user_controller = UserController()

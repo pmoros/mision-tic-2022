@@ -5,6 +5,7 @@ from flask import request, Flask
 from app import db, app
 from app.models import Product, User
 from app.controllers import user_controller, product_controller
+from app.routes import products_edit
 from tests import logger
 
 
@@ -38,28 +39,35 @@ class TestProductController(TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.product = Product(name="Product 1", price=10.0,
-                               image="https://via.placeholder.com/150", stock=10)
+        self.product = {'name': 'Product 10', 'description': 'Description', 'image': 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+                        'price': 1.0, 'stock': 0, 'available': True, 'store_id': 1, 'productLine_id': 1}
 
     def tearDown(self):
         self.app_context.pop()
 
     def test_create_product(self):
         result = product_controller.create_product(self.product)
-        self.assertEqual(result.id, 1)
+        stored_product = Product.query.get(result)
+        logger.info("Created product %s", stored_product.name)
+        self.assertEqual(self.product.get("name"), stored_product.name)
 
     def test_get_all_products(self):
         result = product_controller.get_all_products()
-        self.assertEqual(result[0].image, 'image1.jpg')
-        self.assertEqual(result[0].name, 'Product 1')
-        self.assertEqual(result[0].price, 1.0)
-        self.assertEqual(result[0].stock, 0)
-        self.assertEqual(len(result), 2)
+        logger.info("Number of product stored are %d", len(result))
+        self.assertIsNotNone(result)
 
     def test_get_product(self):
         result = product_controller.get_product(1)
         self.assertEqual(result.id, 1)
 
-    def test_get_products_ordered_by(self):
-        result = product_controller.get_products_ordered_by('name')
-        self.assertEqual(result[0].name, 'Product 1')
+    def test_edit_product(self):
+        product_edited = self.product.copy()
+        product_edited["name"] = "Product 10 edited"
+        product_controller.edit_product(10, product_edited)
+        result = Product.query.get(10)
+        self.assertNotEqual(result.name, self.product.get("name"))
+
+    def test_delete_product(self):
+        product_controller.delete_product(1)
+        result = Product.query.get(1)
+        self.assertIsNone(result)

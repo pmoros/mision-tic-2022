@@ -45,7 +45,6 @@ def products():
 @app.route("/products/create", methods=["GET"])
 @login_required
 def products_create_form():
-    # product_controller.edit_product(product_id, product_values)
     return render_template("products_create.html", user=current_user)
 
 
@@ -69,8 +68,9 @@ def products_edit_form(product_id):
 @login_required
 def products_edit(product_id):
     product_values = request.form.to_dict()
-    app.logger.info("Editing product with id: %d", product_values.get("id"))
-    # product_controller.edit_product(product_id, product_values)
+    app.logger.warning("Updateing product: {}".format(
+        product_values.get("id", -1)))
+    product_controller.edit_product(product_id, product_values)
 
     return redirect(url_for("products"))
 
@@ -78,8 +78,8 @@ def products_edit(product_id):
 @app.route("/products/delete/<int:product_id>")
 @login_required
 def products_delete(product_id):
-    # product_controller.delete_product(product_id)
-    app.logger.info("Deleting product with id: %d", product_id)
+    product_controller.delete_product(product_id)
+    app.logger.warning("Deleting product with id: %d", product_id)
     return redirect(url_for("products"))
 
 
