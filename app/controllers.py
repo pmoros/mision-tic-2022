@@ -27,9 +27,9 @@ class UserController():
 
 
 class ProductController():
-    def create_product(self, product):
-        product = Product(name=product.get("name", ""), description=product.get("description", ""), image=product.get("image", ""), price=product.get("price", 0),
-                          stock=product.get("stock", 0), available=product.get("available", 0), store_id=product.get("store_id", 1), productLine_id=product.get("productLine_id", 1))
+    def create_product(self, product_values):
+        product = Product(name=product_values.get("name", ""), description=product_values.get("description", ""), image=product_values.get("image", ""), price=product_values.get("price", 0),
+                          stock=product_values.get("stock", 0), available=product_values.get("available", 0), store_id=product_values.get("store_id", 1), productLine_id=product_values.get("productLine_id", 1))
         try:
             db.session.add(product)
             db.session.commit()
